@@ -1,0 +1,51 @@
+#editor{
+	position: absolute;
+	background: white;
+	border: solid black;
+	width: 700px;
+	height: 350px;
+	top: 80px;
+	left: 60px;
+	z-index: -1;
+}
+.txtArea{
+	position: absolute;
+	top: 10px;
+	left: 20px;
+}
+.txtArea2{
+	position: absolute;
+	top: 10px;
+	left: 20px;
+}
+
+#traduccion{
+	position: absolute;
+	background: white;
+	border: solid black;
+	width: 700px;
+	height: 350px;
+	top: 80px;
+	left: 790px;
+	z-index: -1;
+}
+#consola{
+	position: absolute;
+	background: white;
+	border: solid black;
+	width: 700px;
+	height: 250px;
+	top: 450px;
+	left: 790px;
+	z-index: -1;
+}
+#tabla{
+	position: absolute;
+	background: white;
+	border: solid black;
+	width: 700px;
+	height: 250px;
+	top: 450px;
+	left: 60px;
+	z-index: -2;
+}

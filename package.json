@@ -1,0 +1,19 @@
+{
+  "name": "OCL_PY2_201709144",
+  "version": "0.0.1",
+  "description": "Proyecto 2 Para la clase de compiladores",
+  "main": "app.js",
+  "scripts": {
+    "start": "node sources/app.js",
+    "dev": "nodemon sources/app.js"
+  },
+  "keywords": [],
+  "author": "Teitan67",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
