@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Proyecto 2</title>
+	<link rel="stylesheet" type="text/css" href="./css/main.css">
+	<link rel="stylesheet" type="text/css" href="./css/style-menu.css">
+	<link rel="stylesheet" type="text/css" href="./css/editorTxt.css">
+	<link rel="stylesheet" type="text/css" href="./css/tablaStyle.css">
+	<link rel="stylesheet" type="text/css" href="./css/tabStyle.css">
+	<link rel="stylesheet" type="text/css" href="./css/tabsStyle.css">
+	<meta charset="UTF-8">
+</head>
+<body>
+	<div id="header">
+		<ul class="nab">
+			<li><a>Archivo</a>
+				<ul>
+					<li><button class="btn" onclick="addTab('','')">Nuevo</button></li>
+					<li><button id="button" class="btn" onclick="">Abrir</button></li>
+					<input id="file-input" type="file" name="name" style="display: none;" accept=".cs" />
+					<li><button class="btn " onclick="guardar(0)">Guardar</button></li>
+					<li><button class="btn" onclick="guardar(1)" >Guardar como...</button></li>
+				</ul>
+			</li>
+			
+			<li><a>Reportes</a>
+				<ul>
+					<li><button class="btn" onclick="mostrarError()">Generar reporte errores</button></li>
+					<li><button class="btn">Generar reporte en Py</button></li>
+					<li><button class="btn">Generar reporte en html</button></li>
+				</ul>
+			</li>
+			<li><button class="btn" id="analizar" onclick="analizar(obtenerTexto())">▶ Analizar</button></li>
+		</ul>
+	</div>
+	<div id="editor">
+		<div class="tab" id="MenuTabs">
+			
+		</div> 
+	
+	</div>
+	<div id="traduccion">
+		<textarea  id="txtPy"class="txtArea2" rows="21" cols="90" disabled="true"></textarea>
+	</div>
+	<div id="consola">
+		<div class="tab">
+  			<button class="tablinks" onclick="openCity(event, 'html')">HTML</button>
+ 			<button class="tablinks" onclick="openCity(event, 'JSON')">JSON</button>
+		</div>
+		<div id="html" class="tabcontent" >
+  			<textarea class="txtArea3" id="txtHtml" rows="10" cols="90" disabled="true">html...</textarea>
+		</div>
+		<div id="JSON" class="tabcontent">
+  			<textarea  class="txtArea3" id="s" rows="10" cols="90" disabled="true">json...</textarea>
+		</div>
+	</div>
+	<div id="tabla">
+		<table id="tabVariables" table border="5" class="tableSection" >
+  			<tr id="tabTitle" bgcolor="black" >
+    			<th><font color="white">Nombre</font></th>
+    			<th><font color="white">Tipo</font></th>
+    			<th><font color="white">Linea</font></th>
+  			</tr>
+		</table>
+	</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="js/tabMove.js"></script>
+<script type="text/javascript" src="js/tabsControl.js"></script>
+<script type="text/javascript" src="js/Analizador.js"></script>
+<script type="text/javascript" src="js/ejecutor.js"></script>
+<script type="text/javascript" src="js/traduccion.js"></script>
+<script type="text/javascript" src="js/manejoErrores.js"></script>
+
+</html>

@@ -1,0 +1,1 @@
+var parserSource = generator.generate({moduleName: "Analizador"});

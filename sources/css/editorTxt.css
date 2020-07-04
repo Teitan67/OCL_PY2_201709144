@@ -10,13 +10,23 @@
 }
 .txtArea{
 	position: absolute;
-	top: 10px;
-	left: 20px;
+	top: 65px;
+	left: 0px;
+
+}
+.txtArea3{
+	position: absolute;
+	top: 60px;
+	left: 0px;
+	width: 680px;
+	height: 170px;
 }
 .txtArea2{
 	position: absolute;
-	top: 10px;
-	left: 20px;
+	top: 0px;
+	left: 0px;
+	width: 680px;
+	height: 330px;
 }
 
 #traduccion{
@@ -48,4 +58,17 @@
 	top: 450px;
 	left: 60px;
 	z-index: -2;
+}
+.ejec{
+	position: absolute;
+	top: 310px;
+	background: black;
+	color: white;
+	left: 570px;
+	transition: 0.3s;
+}
+.ejec:hover{
+	background: white;
+	color: black;
+	transition: 0.3s;
 }

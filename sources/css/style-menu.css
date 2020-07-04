@@ -8,10 +8,10 @@
 ul, ol {
 	list-style:none;
 }	
-.nav > li {
+.nab > li {
 	float:left;
 }
-.nav li a {
+.nab li a {
 	background-color:#000;
 	color:#fff;
 	text-decoration:none;
@@ -19,22 +19,22 @@ ul, ol {
 	display:block;
 	transition: 0.3s;
 }
-.nav li a:hover {
+.nab li a:hover {
 	background-color:#434343;
 	transition: 0.3s;
 }
-.nav li ul {
+.nab li ul {
 	display:none;
 	position:absolute;
 	min-width:140px;
 }
-.nav li:hover > ul {
+.nab li:hover > ul {
 	display:block;
 }
-.nav li ul li {
+.nab li ul li {
 	position:relative;
 }
-.nav li ul li ul {
+.nab li ul li ul {
 	right:-140px;
 	top:0px;
 }
