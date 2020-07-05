@@ -7,10 +7,9 @@ function agregarError(tipo,descripcion,columna,fila){
 function mostrarError(){
     contenido+="</table></center></div></body></html>";
     guardarErrores(contenido);
-}
+   }
 function guardarErrores(txt){
     var nombre="reportErrores.html";
-
     var texto=txt;
     var bom = document.createElement('a');
     bom.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(texto));
@@ -22,4 +21,5 @@ function guardarErrores(txt){
     }else{
       bom.click();
     }
+    
   }
