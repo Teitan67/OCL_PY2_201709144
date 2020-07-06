@@ -4,10 +4,16 @@ function variables(tabs,contenido){
 function asignacion(tab,contenido){
     traducir( nTabs(tab)+contenido+"\n");
 }
-function nTabs(numero){
-    var tabulares ="";
-    for(var i = 0;i<numero;i++){
-        tabulares+="\t";
-    }
-    return tabulares
+function print_if(tabs,contenido){
+    traducir( nTabs(tabs)+contenido+"\n");
+    tabs++;
+}
+function tablear(input ){
+    const var1 = /\n/gi;
+    const var2 = /\t/gi;
+
+    input=input.replace(var2, '\t');
+    input=input.replace(var1, '\n\t');
+
+    return input; 
 }

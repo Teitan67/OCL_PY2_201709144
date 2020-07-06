@@ -26,8 +26,8 @@
 			<li><a>Reportes</a>
 				<ul>
 					<li><button class="btn" onclick="mostrarError()">Generar reporte errores</button></li>
-					<li><button class="btn">Generar reporte en Py</button></li>
-					<li><button class="btn">Generar reporte en html</button></li>
+					<li><button class="btn" onclick="generarPyton()">Generar reporte en Py</button></li>
+					<li><button class="btn" onclick="generarHTML()">Generar reporte en html</button></li>
 				</ul>
 			</li>
 			<li><button class="btn" id="analizar" onclick="analizar(obtenerTexto())">▶ Analizar</button></li>
@@ -48,10 +48,10 @@
  			<button class="tablinks" onclick="openCity(event, 'JSON')">JSON</button>
 		</div>
 		<div id="html" class="tabcontent" >
-  			<textarea class="txtArea3" id="txtHtml" rows="10" cols="90" disabled="true">html...</textarea>
+  			<textarea class="txtArea3" id="txtHtml" rows="10" cols="90" disabled="true"></textarea>
 		</div>
 		<div id="JSON" class="tabcontent">
-  			<textarea  class="txtArea3" id="s" rows="10" cols="90" disabled="true">json...</textarea>
+  			<textarea  class="txtArea3" id="txtJSON" rows="10" cols="90" disabled="true"></textarea>
 		</div>
 	</div>
 	<div id="tabla">
@@ -71,5 +71,6 @@
 <script type="text/javascript" src="js/ejecutor.js"></script>
 <script type="text/javascript" src="js/traduccion.js"></script>
 <script type="text/javascript" src="js/manejoErrores.js"></script>
+<script type="text/javascript" src="js/traductorHTML.js"></script>
 
 </html>

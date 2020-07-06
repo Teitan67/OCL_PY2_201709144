@@ -5,17 +5,29 @@ function analizar(texto){
     if(errores>0){
         alert("Se detectaron "+errores+" errores");
     }
+    var txtTraducion=document.getElementById("txtHtml");
+    var contenido=txtTraducion.value;
+    traductorHTML.parse(contenido);
+}
+function addVariable(nombre,tipo,linea){
+    var tabla=document.getElementById("tabTitle");
+    for(var i=0;i<nombre.length ;i++){
+        tabla.insertAdjacentHTML("afterend", "<tr><td id='nombre[i]'>"+nombre[i]+"</td><td>"+tipo+"</td><td>"+linea+"</td></tr>"); 
+    }
 }
 function addVariable(nombre,tipo,linea){
     var tabla=document.getElementById("tabTitle");
     for(var i=0;i<nombre.length ;i++){
         tabla.insertAdjacentHTML("afterend", "<tr><td>"+nombre[i]+"</td><td>"+tipo+"</td><td>"+linea+"</td></tr>"); 
     }
-  
 }
 function limpiar(){
     setTraduccion("");
     var elementos = document.getElementById("tabTitle");
+    
+    var txtTraducion=document.getElementById("txtHtml");
+    txtTraducion.value="";
+    setJSON("");
     while(elementos.nextElementSibling!=null){
         elementos.nextElementSibling.remove();
     }

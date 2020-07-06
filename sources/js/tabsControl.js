@@ -103,11 +103,54 @@ function setTraduccion(texto){
   var txtTraducion=document.getElementById("txtPy");
   txtTraducion.value=texto;
 }
+function setJSON(texto){
+  var txtTraducion=document.getElementById("txtJSON");
+  txtTraducion.value=texto;
+}
 function traducir(sentencia){
   var txtTraducion=document.getElementById("txtPy");
   var contenido=txtTraducion.value;
   contenido+=sentencia;
   txtTraducion.value=contenido;
 }
+function setHTML(texto){
+  texto = texto.slice(1, -1);
 
+  const var1 = />/gi;
+  texto=texto.replace(var1, '>\n');
 
+  var txtTraducion=document.getElementById("txtHtml");
+  var contenido=txtTraducion.value;
+  contenido+=texto;
+  txtTraducion.value=contenido;
+}
+function generarHTML(){
+  var txtTraducion=document.getElementById("txtHtml");
+  var contenido=txtTraducion.value;
+  var texto=contenido;
+    var bom = document.createElement('a');
+    bom.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(texto));
+    bom.setAttribute('download',"index.html");
+    if(document.createEvent){
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click',true,true);
+        bom.dispatchEvent(event);
+    }else{
+      bom.click();
+    }
+}
+function generarPyton(){
+  var txtTraducion=document.getElementById("txtPy");
+  var contenido=txtTraducion.value;
+  var texto=contenido;
+    var bom = document.createElement('a');
+    bom.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(texto));
+    bom.setAttribute('download',"traduccion.py");
+    if(document.createEvent){
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click',true,true);
+        bom.dispatchEvent(event);
+    }else{
+      bom.click();
+    }
+}
