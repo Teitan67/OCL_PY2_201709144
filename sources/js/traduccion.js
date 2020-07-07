@@ -17,3 +17,9 @@ function tablear(input ){
 
     return input; 
 }
+function py(){
+
+    var txtTraducion=document.getElementById("txtHtml");
+    var contenido=txtTraducion.value;
+    traductorHTML.parse(contenido);
+}

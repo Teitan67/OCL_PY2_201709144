@@ -56,7 +56,15 @@
 ")"					return 'PC';
 "(" 				return 'PA';	
 "{"					return 'LLA';	
-"}"					return 'LLC';	
+"}"					return 'LLC';
+"void"				return 'VOID';
+"main"				return 'MAIN';
+"switch"			return 'SWITCH';
+"case"				return 'CASE';
+":"					return 'DOSPTS';
+"default"			return 'DEFAULT';
+"do"				return 'DO';
+"return"			return 'RETURN';
 
 
 [0-9]+("."[0-9]+)			return 'DECIMAL';
@@ -105,16 +113,31 @@
 
 programa
 			:lsentencias { traducir($1);}
+			|main { traducir($1);}
 ;
 
+main
+			: VOID MAIN PA PC LLA lsentencias LLC {$$="def main ():\n"+tablear($6)+" \nif__name__=\"__main__\":\n main() ";} 
+;
 lsentencias
 			:lsentencias sentencias	{$$=$1+$2;}
 			|sentencias {$$=$1;}
-			
-			|error PTCOMA {console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,'',@2.first_line); $$="";}
-						
+			|lsentencias funciones {$$=$1+$2;}
+			|funciones {$$=$1;}
+			//|error PTCOMA {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}
+			//|error LLC {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}						
 ;
-
+funciones
+			: VOID ID PA parametros PC LLA LLC { $$="\ndef "+$2+"( "+$4+"): ";}
+			| VOID ID PA parametros PC LLA lsentencias LLC{$$="\ndef "+$2+"("+$4+" ): "+tablear($7)+"\n";}
+			| tipo ID PA parametros PC LLA LLC { $$="\ndef "+$2+"( "+$4+"): ";}
+			| tipo ID PA parametros PC LLA lsentencias LLC{$$="\ndef "+$2+"("+$4+" ): "+tablear($7)+"\n";}
+;
+parametros
+			:tipo ID COMA parametros {$$=$2+" , "+$4; value.push($2); addVariable(value,$1,@1.first_line); value=[];}
+			|tipo ID { $$=$2;value.push($2); addVariable(value,$1,@1.first_line); value=[]; }
+			|{$$="";}
+;
 sentencias
 			:variables  {$$='\n'+$1; }
 			|stc_if 	{$$='\n'+$1; }
@@ -125,12 +148,17 @@ sentencias
 			|BREAK PTCOMA		{$$='\n'+$1; }
 			|CONTINUE PTCOMA	{$$='\n'+$1; }
 			|llamada {$$='\n'+$1; }
+			|RETURN dato PTCOMA {$$="\n"+$1+" "+$2}
+			|RETURN n44 PTCOMA {$$="\n"+$1+" "+$2}
+			|RETURN  PTCOMA {$$="\n"+$1}
+			|DO_WHILE {$$='\n'+$1; }
+			|switch {$$='\n'+$1; }
 		
 ;
 
 variables
 			: tipo v10 {  addVariable(value,$1,@1.first_line); value=[];  $$='var '+$2;}
-			| v10 { value=[]; $$='\n\s'+$1;}
+			| v10 { value=[]; $$='\n'+$1;}
 ;
 
 v10
@@ -213,15 +241,18 @@ tipo
 ;
 stc_if
 			: IF PA condicion PC LLA lsentencias LLC lprim {	 $$=$1+" "+$3+" : " +tablear($6)+'\n' +$8+'\n'; 	}
+			|IF PA condicion PC LLA  LLC lprim {	 $$=$1+" "+$3+" : \n" +$8+'\n'; 	}
 ;
 
 lprim
 			: ELSE IF PA condicion PC LLA lsentencias LLC lprim {$$='elif '+$4 + tablear($7)+'\n' +$9+'\n';}
+			| ELSE IF PA condicion PC LLA  LLC lprim {$$='elif '+$4 +':\n' +$8+'\n';}
 			| lprim2 {$$=$1;}
 ;
 
 lprim2
 			: ELSE LLA lsentencias LLC{$$=$1 + tablear($3);}
+			| ELSE LLA  LLC{$$=$1 ;}
 			|{$$="";}
 ;
 
@@ -251,6 +282,7 @@ consol
 
 stc_while
 			: WHILE PA condicion  PC LLA lsentencias LLC {$$=$1+" "+$3+" : \n"+tablear($6)+"";}
+			| WHILE PA condicion  PC LLA  LLC {$$=$1+" "+$3+" : \n";}
 ;
 stc_for
 			: FOR PA variables comparador PTCOMA  n44 PC LLA lsentencias LLC {$$="for "+"a"+" in a range( 1"+" , "+"10 ): \n"+tablear($9)+"\n"}
@@ -258,4 +290,18 @@ stc_for
 ;
 
 llamada:	ID PA pentrada PC  PTCOMA {$$=$1+$2+$3+$4}
+;
+
+DO_WHILE
+			:DO  LLA LLC WHILE PA condicion PC {$$="while true:\n"+"\ta=a+1\n\tif ("+$6+"):\n\t\t break\n";}
+			|DO  LLA lsentencias LLC WHILE PA condicion PC {$$="while true:\n"+tablear($3)+"\n\ta=a+1\n\tif ("+$7+"):\n\t\t break\n";}
+;
+switch
+			:SWITCH PA ID PC LLA LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+""+"\n\t}"}
+			|SWITCH  PA ID PC LLA casos LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+$6+"\n\t}"}
+;
+casos
+			: CASE dato DOSPTS lsentencias {$$="\t\t"+$2+":"+tablear(tablear(tablear($4)))+"\n";}
+			| CASE dato DOSPTS lsentencias casos{$$="\t\t"+$2+": \t\t\t"+tablear(tablear(tablear($4)))+",\n"+$5;} 
+			| DEFAULT DOSPTS lsentencias {$$="\t\t-1 : \t\t"+tablear(tablear(tablear($3)))+"\n";}
 ;

@@ -2,12 +2,11 @@ function analizar(texto){
     
     limpiar();
     Analizador.parse(texto);
+    py();
     if(errores>0){
         alert("Se detectaron "+errores+" errores");
     }
-    var txtTraducion=document.getElementById("txtHtml");
-    var contenido=txtTraducion.value;
-    traductorHTML.parse(contenido);
+
 }
 function addVariable(nombre,tipo,linea){
     var tabla=document.getElementById("tabTitle");

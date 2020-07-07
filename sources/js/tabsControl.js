@@ -128,6 +128,7 @@ function generarHTML(){
   var txtTraducion=document.getElementById("txtHtml");
   var contenido=txtTraducion.value;
   var texto=contenido;
+  py();
     var bom = document.createElement('a');
     bom.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(texto));
     bom.setAttribute('download',"index.html");
