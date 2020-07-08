@@ -17,6 +17,7 @@
 "for"				return 'FOR';
 "int"				return 'INT';
 "double"			return 'DOUBLE';
+
 "string"			return 'STRING';
 "char"				return 'CHAR';
 "bool"				return 'BOOL';
@@ -33,12 +34,13 @@
 "!="				return 'Diferente';
 "&&"				return 'Y';
 "||"				return 'O';
-"!"					return 'NOT';
-">"					return 'MYOR';
-"<"					return 'MNOR';
 "<="				return 'MNORI';
 ">="				return 'MYORI';
 "=="				return 'MISMOq';
+"!"					return 'NOT';
+">"					return 'MYOR';
+"<"					return 'MNOR';
+
 
 
 "++"				return 'INCREMENTO';
@@ -114,6 +116,7 @@
 programa
 			:lsentencias { traducir($1);}
 			|main { traducir($1);}
+			|{}
 ;
 
 main
@@ -124,8 +127,6 @@ lsentencias
 			|sentencias {$$=$1;}
 			|lsentencias funciones {$$=$1+$2;}
 			|funciones {$$=$1;}
-			//|error PTCOMA {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}
-			//|error LLC {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}						
 ;
 funciones
 			: VOID ID PA parametros PC LLA LLC { $$="\ndef "+$2+"( "+$4+"): ";}
@@ -153,6 +154,9 @@ sentencias
 			|RETURN  PTCOMA {$$="\n"+$1}
 			|DO_WHILE {$$='\n'+$1; }
 			|switch {$$='\n'+$1; }
+			|error PTCOMA {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}
+			|error LLC {$$="";console.log("Modo panico activado!!");agregarError('Sintactico','Token no esperado, modo panico activado'+$1,@1.first_column,@2.first_line); $$="";}						
+
 		
 ;
 
@@ -181,11 +185,9 @@ v3
 ;
 
 dato
-			:CARACTER	{$$=$1;}
-			|TRUE		{$$=$1;}
-			|FALSE		{$$=$1;}
-			|numeros	{$$=$1;}
-			|HTML		{$$=$1;}
+			:numeros {$$=$1;}
+			|TRUE {$$=$1;}
+			|FALSE {$$=$1;}
 ;
 
 
@@ -202,7 +204,7 @@ n1
 ;
 
 n2
-			:PA n3 PC  	 		 {$$=$1+$2+$3;}
+			:PA numeros PC  	 		 {$$=$1+$2+$3;}
 			|n3					 {$$=$1}
 ;
 
@@ -222,31 +224,37 @@ n4
 			| ID 	 		{$$=$1}	
 			| ID llamado 	{$$=$1+$2}	
 			|CADENA			{$$=$1;}
+			|CARACTER	{$$=$1;}
+			|HTML		{$$=$1;}
 ;
 
 llamado:	PA pentrada PC  {$$=$1+$2+$3;};
-pentrada	: dato p1  {$$=$1+$2}	
-			| {$$=""}
-;
-p1			:COMA dato {$$=$1+$2}
+pentrada	: dato COMA pentrada  {$$=$1+$2+$3;}	
+			| dato {$$=$1}
 			| {$$=""}
 ;
 
+
 tipo
-			:STRING
-			|CHAR
-			|INT
-			|DOUBLE
-			|BOOL
+			:STRING{$$=$1;}
+			|CHAR{$$=$1;}
+			|INT{$$=$1;}
+			|DOUBLE{$$=$1;}
+			|BOOL{$$=$1;}
 ;
 stc_if
 			: IF PA condicion PC LLA lsentencias LLC lprim {	 $$=$1+" "+$3+" : " +tablear($6)+'\n' +$8+'\n'; 	}
-			|IF PA condicion PC LLA  LLC lprim {	 $$=$1+" "+$3+" : \n" +$8+'\n'; 	}
+			| IF PA dato PC LLA  LLC lprim {	 $$=$1+" "+$3+" : \n" +$8+'\n'; 	}
+			| IF PA dato PC LLA lsentencias LLC lprim {	 $$=$1+" "+$3+" : " +tablear($6)+'\n' +$8+'\n'; 	}
+			| IF PA condicion PC LLA  LLC lprim {	 $$=$1+" "+$3+" : \n" +$8+'\n'; 	}
 ;
 
 lprim
 			: ELSE IF PA condicion PC LLA lsentencias LLC lprim {$$='elif '+$4 + tablear($7)+'\n' +$9+'\n';}
+			
+			| ELSE IF PA dato PC LLA lsentencias LLC lprim {$$='elif '+$4 + tablear($7)+'\n' +$9+'\n';}
 			| ELSE IF PA condicion PC LLA  LLC lprim {$$='elif '+$4 +':\n' +$8+'\n';}
+			| ELSE IF PA dato PC LLA  LLC lprim {$$='elif '+$4 +':\n' +$8+'\n';}
 			| lprim2 {$$=$1;}
 ;
 
@@ -259,15 +267,20 @@ lprim2
 condicion
 			:condicion O c1 {$$=$1+' or '+$1;}
 			|c1				{$$=$1;}
+			| TRUE  O c1 {$$=$1+' or '+$1;}
+			| FALSE  O c1 {$$=$1+' or '+$1;}
 ;
 c1
 			:c1 Y c2		{$$=$1+' and '+$1;}
 			|c2				{$$=$1;}
+			| TRUE  Y c2 {$$=$1+' or '+$1;}
+			| FALSE  Y c2 {$$=$1+' or '+$1;}
 ;
 c2
-			:NOT comparador {$$=' not '+$2;}
-			|comparador		{$$= $1;}
+			:NOT c2 {$$=' not '+$2;}		
+			|comparador	{$$= $1;}
 ;
+
 comparador
 			:dato MYOR dato 		{$$=$1+$2+$3;}
 			|dato MNOR dato			{$$=$1+$2+$3;}
@@ -275,14 +288,21 @@ comparador
 			|dato MYORI dato		{$$=$1+$2+$3;}
 			|dato MISMOq dato		{$$=$1+$2+$3;}
 			|dato Diferente dato	{$$=$1+$2+$3;}
+			|PA condicion PC {$$=$1+$2+$3;}
+			
+						
 ;
+
 consol
-			:CONSOLA PT WRITE PA dato PC PTCOMA {$$="print("+$5+")"}
+			:CONSOLA PT WRITE PA numeros PC PTCOMA {$$="print("+$5+")"}
+			|CONSOLA PT WRITE PA  PC PTCOMA {$$="print( )"}
 ;
 
 stc_while
 			: WHILE PA condicion  PC LLA lsentencias LLC {$$=$1+" "+$3+" : \n"+tablear($6)+"";}
 			| WHILE PA condicion  PC LLA  LLC {$$=$1+" "+$3+" : \n";}
+			| WHILE PA dato  PC LLA lsentencias LLC {$$=$1+" "+$3+" : \n"+tablear($6)+"";}
+			| WHILE PA dato  PC LLA  LLC {$$=$1+" "+$3+" : \n";}
 ;
 stc_for
 			: FOR PA variables comparador PTCOMA  n44 PC LLA lsentencias LLC {$$="for "+"a"+" in a range( 1"+" , "+"10 ): \n"+tablear($9)+"\n"}
@@ -295,10 +315,12 @@ llamada:	ID PA pentrada PC  PTCOMA {$$=$1+$2+$3+$4}
 DO_WHILE
 			:DO  LLA LLC WHILE PA condicion PC {$$="while true:\n"+"\ta=a+1\n\tif ("+$6+"):\n\t\t break\n";}
 			|DO  LLA lsentencias LLC WHILE PA condicion PC {$$="while true:\n"+tablear($3)+"\n\ta=a+1\n\tif ("+$7+"):\n\t\t break\n";}
+			|DO  LLA LLC WHILE PA dato PC {$$="while true:\n"+"\ta=a+1\n\tif ("+$6+"):\n\t\t break\n";}
+			|DO  LLA lsentencias LLC WHILE PA dato PC {$$="while true:\n"+tablear($3)+"\n\ta=a+1\n\tif ("+$7+"):\n\t\t break\n";}
 ;
 switch
-			:SWITCH PA ID PC LLA LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+""+"\n\t}"}
-			|SWITCH  PA ID PC LLA casos LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+$6+"\n\t}"}
+			:SWITCH PA dato PC LLA LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+""+"\n\t}"}
+			|SWITCH  PA dato PC LLA casos LLC {$$="def switch(case , "+$3+"): \n\t switcher={\n"+$6+"\n\t}"}
 ;
 casos
 			: CASE dato DOSPTS lsentencias {$$="\t\t"+$2+":"+tablear(tablear(tablear($4)))+"\n";}
